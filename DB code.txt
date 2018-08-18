@@ -1,0 +1,285 @@
+create table Customer
+(
+	CustomerId varchar(8),
+	CustomerName varchar(50),
+	Address varchar(100),
+	Contact nvarchar(10),
+	Email varchar(50)
+
+	primary key(CustomerId)	
+);
+
+create table Department
+(
+	DeptId varchar(8),
+	DeptName varchar(50),
+
+	primary key(DeptId),
+);
+
+create table Employee
+(
+	EmpId varchar(8),
+	EmpName varchar (50),
+	EmpContact varchar(10),
+	EmpEmail varchar(50),
+	EmpDOB date,
+	EmpAddress varchar(100),
+	Position varchar(50),
+	EmpBasicSalary decimal,
+	DeptId varchar(8),
+
+	primary key(EmpId),
+	foreign key(DeptId) references Department
+);
+
+create table ProductCategory
+(
+	CatergoryId varchar(8),
+	CatergoryName varchar(50)
+
+	primary key(CatergoryId)
+);
+
+
+create table Product
+(
+	ProductId varchar(8),
+	ProductName varchar(50),
+	QuantityAvailable int,
+	SellingPrice decimal,
+	UnitPrice decimal,
+	CatergoryId varchar(8),
+
+	primary key(ProductId),
+	foreign key(CatergoryId) references ProductCategory
+);
+
+
+create table Orders
+(
+	OrderId varchar(8),
+	OrderDate datetime,
+	OrderStatus varchar(50),
+	PaymentStatus Varchar(50),
+	CustomerId varchar(8),
+	EmpId varchar(8),
+	TotalAmount float
+
+	primary key(OrderId),
+	foreign key(CustomerId) references Customer,
+	foreign key(EmpId) references Employee
+
+);
+
+create table OrderItem
+(
+	OrderItemId varchar(8), 
+	OrderId varchar(8),
+	ProductId varchar(8),
+	Quantity int,
+
+	
+	primary key(OrderItemId),
+	foreign key(OrderId) references Orders,
+	foreign key(ProductId) references Product
+);
+
+create table PaymentReceived(
+	PRId varchar(8),
+	PRDate datetime,
+	PRAmount decimal,
+	OrderId varchar(8),
+
+	primary key(PRId),
+	foreign key(OrderId) references Orders
+
+);
+
+
+
+ create table EmployeeLeaves
+ (
+	ELId varchar(8),
+	FromDate date,
+	ToDate date,
+	Comment varchar(250),
+	EmpId varchar(8),
+
+	primary key(ELId),
+	foreign key(EmpId) references Employee
+
+
+ );
+
+ create table Salary
+ (
+	SalId varchar(8),
+	Saldate datetime,
+	SalMonth varchar(50),
+	SalYear varchar(4),
+	SalaryStatus varchar(50),
+	EmpId varchar(8),
+
+	primary key(SalId),
+	foreign key(EmpId) references Employee
+ );
+
+
+create table Delivery
+(
+	DeliveryId varchar(8),
+	Cost decimal,
+	City varchar(50),
+	Status varchar(25),
+	DeliveryType varchar(25),
+	OrderId varchar(8),
+	CustomerId varchar(8),
+	EmployeeId varchar(8),
+	
+
+	primary key(DeliveryId),
+	foreign key(OrderId) references Orders,
+	foreign key(CustomerId) references Customer,
+	foreign key(EmployeeId) references Employee
+
+
+);
+
+create table Supplier
+(
+	SupId varchar(8),
+	SupName varchar(50),
+	Address varchar(50),
+	Contact varchar(50),
+	status varchar(20),
+	CreditBal float
+
+	primary key(SupId)
+);
+
+
+create table SupplierPurchase
+(
+	SPId varchar(8),
+	SupId varchar(8),
+	PurchaseDate datetime,
+
+	primary key(SPId),
+	foreign key(SupId) references Supplier
+);
+
+create table PurchaseProduct
+(
+	PPId varchar(8),
+	SPId varchar(8),
+	ProductId varchar(8),
+	Quantity int,
+	price decimal,
+
+	primary key(PPId),
+	foreign key(SPId) references SupplierPurchase,
+	foreign key(ProductId) references Product
+);
+
+
+create table SupplierPayment
+(
+	SupPayId varchar(8),
+	SupId varchar(8),
+	Amount float,
+	PayDate datetime,
+	
+	primary key(SupPayId),
+	foreign key(SupId) references Supplier
+
+);
+
+create table Users(
+	UserId varchar(8),
+	Username varchar(25),
+	Password varchar(25),
+	EmpId varchar(8)
+
+	primary key(UserId),
+	foreign key(Empid) references Employee
+
+);
+
+
+create table PettyCash(
+	PcId varchar(8),
+	Catergory varchar(50),
+	Description varchar(150),
+	Amount float,
+	Date datetime
+
+	primary key(PcId)
+);
+
+create table PaymentPaid
+(
+	PPId varchar(8),
+	Amount float,
+	Date datetime,
+	PCId varchar(8),
+	SalId varchar(8),
+	SpId varchar(8),
+	DelId varchar(8)
+
+	primary key(PPId),
+	foreign key(PCId) references PettyCash,
+	foreign key(SalId) references Salary,
+	foreign key(SpId) references SupplierPayment,
+	foreign key(DelId) references Delivery
+);
+
+
+
+
+
+
+CREATE TABLE [dbo].[regemployees](
+	[no] [int] IDENTITY(1,1) NOT NULL,
+	[EmplId]  AS ('EMP'+right('000'+CONVERT([varchar](10),[no]),(6))) PERSISTED NOT NULL,
+	[FirstName] [varchar](50) NULL,
+	[LastName] [varchar](50) NULL,
+	[Gender] [varchar](50) NULL,
+	[DOB] [varchar](50) NULL,
+	[Contact] [varchar](50) NULL,
+	[Email] [varchar](50) NULL,
+	[Address] [varchar](100) NULL,
+	[nic] [varchar](20) NULL,
+	[DepName] [varchar](50) NULL,
+	[DepID] [varchar](50) NULL,
+	[Salary] [varchar](50) NULL,
+	[JobRole] [varchar](50) NULL,
+	[DateOfReg] [varchar](50) NULL,
+ CONSTRAINT [PK_regemployee] PRIMARY KEY CLUSTERED 
+(
+	[EmplId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+
+
+
+CREATE TABLE [dbo].[empleaverequest](
+	[no] [int] IDENTITY(1,1) NOT NULL,
+	[LeaveID]  AS ('LR'+right('00'+CONVERT([varchar](10),[no]),(6))) PERSISTED NOT NULL,
+	[EmployeeID] [varchar](50) NULL,
+	[EmployeeName] [varchar](50) NULL,
+	[DepartmentID] [varchar](50) NULL,
+	[LeaveCategory] [varchar](50) NULL,
+	[LeaveStartDate] [varchar](50) NULL,
+	[LeaveEndDate] [varchar](50) NULL,
+	[LeaveDescription] [varchar](200) NULL,
+	[directordecision] [varchar](20) NULL,
+ CONSTRAINT [PK_empleaverequest] PRIMARY KEY CLUSTERED 
+(
+	[LeaveID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
